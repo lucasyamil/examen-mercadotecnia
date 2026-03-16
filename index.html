@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OKR Platform — I+D+I 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --w:#ffffff;--g50:#fafafa;--g100:#f4f4f4;--g200:#e8e8e8;--g300:#d1d1d1;--g400:#a3a3a3;--g500:#737373;--g700:#404040;--g900:#111111;--black:#0a0a0a;
+  --red:#e82127;--red-lt:#fff0f0;--red-md:#ffd6d6;
+  --blue:#1565c0;--blue-lt:#e8f1fc;
+  --green:#15803d;--green-lt:#e8f7ee;
+  --amber:#b45309;--amber-lt:#fef3c7;
+  --F:'Urbanist',sans-serif;--M:'JetBrains Mono',monospace;
+  --bd:1px solid var(--g200);--r:4px;--r2:8px;
+  --sh:0 1px 4px rgba(0,0,0,.07);--sh2:0 4px 24px rgba(0,0,0,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--w);color:var(--g900);font-family:var(--F);-webkit-font-smoothing:antialiased;overflow:hidden}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--g300);border-radius:2px}
+
+/* AUTH */
+#login-screen,#register-screen{position:fixed;inset:0;background:var(--w);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .3s}
+#login-screen.hidden,#register-screen.hidden{opacity:0;pointer-events:none}
+.auth-wrap{display:flex;width:860px;max-width:98vw;height:560px;border:var(--bd);border-radius:var(--r2);box-shadow:var(--sh2);overflow:hidden}
+.auth-L{width:320px;flex-shrink:0;background:var(--black);display:flex;flex-direction:column;justify-content:flex-end;padding:44px;position:relative;overflow:hidden}
+.auth-L::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#1a1a1a,#000)}
+.auth-grid{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(to right,#fff 1px,transparent 1px),linear-gradient(to bottom,#fff 1px,transparent 1px);background-size:36px 36px}
+.auth-badge{position:relative;z-index:1;display:inline-block;background:var(--red);color:#fff;font-family:var(--M);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin-bottom:16px;width:fit-content}
+.auth-h{position:relative;z-index:1;font-size:42px;font-weight:900;color:#fff;line-height:1;letter-spacing:-2px;margin-bottom:10px}
+.auth-sub{position:relative;z-index:1;font-size:12px;color:var(--g400);line-height:1.7}
+.auth-R{flex:1;background:var(--w);display:flex;flex-direction:column;justify-content:center;padding:48px 44px}
+.auth-ft{font-size:20px;font-weight:800;color:var(--g900);letter-spacing:-.5px;margin-bottom:3px}
+.auth-fs{font-size:12px;color:var(--g400);margin-bottom:28px}
+.fl{font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:1.2px;display:block;margin-bottom:5px}
+.fi{width:100%;border:var(--bd);border-radius:var(--r);padding:11px 13px;font-size:13px;font-family:var(--F);color:var(--g900);background:var(--w);outline:none;transition:border-color .15s,box-shadow .15s;margin-bottom:12px}
+.fi:focus{border-color:var(--g900);box-shadow:0 0 0 3px rgba(0,0,0,.05)}
+.auth-btn{width:100%;background:var(--g900);border:none;border-radius:var(--r);padding:13px;color:#fff;font-family:var(--F);font-size:13px;font-weight:700;letter-spacing:.3px;cursor:pointer;transition:background .15s;margin-top:2px}
+.auth-btn:hover{background:var(--red)}
+.auth-err{font-size:11px;color:var(--red);text-align:center;min-height:16px;margin-top:8px}
+.auth-div{border:none;border-top:var(--bd);margin:18px 0}
+.auth-sw{font-size:12px;color:var(--g400);text-align:center}
+.auth-sw a{color:var(--g900);font-weight:700;cursor:pointer;text-decoration:none}
+.auth-sw a:hover{color:var(--red)}
+
+/* APP */
+#app{display:none;height:100vh;flex-direction:row}
+#app.visible{display:flex}
+
+/* SIDEBAR */
+.sidebar{width:232px;flex-shrink:0;background:var(--w);border-right:var(--bd);display:flex;flex-direction:column}
+.sb-head{padding:20px 20px 18px;border-bottom:var(--bd);display:flex;align-items:center;gap:10px}
+.sb-wm{font-size:15px;font-weight:900;letter-spacing:-.4px;color:var(--g900)}
+.sb-wm span{color:var(--red)}
+.sb-tag{font-family:var(--M);font-size:9px;letter-spacing:2px;color:var(--g400);background:var(--g100);padding:2px 7px;border-radius:2px;margin-left:auto}
+.nav-sec{padding:18px 12px 4px}
+.nav-lbl{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g300);padding:0 8px;margin-bottom:4px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:9px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:var(--g500);transition:all .12s;border:1px solid transparent}
+.nav-item:hover{background:var(--g50);color:var(--g900)}
+.nav-item.active{background:var(--g900);color:#fff}
+.nav-ico{font-size:13px;width:18px;text-align:center;flex-shrink:0}
+.sb-foot{margin-top:auto;padding:14px 12px;border-top:var(--bd)}
+.uc{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--r);background:var(--g50);border:var(--bd)}
+.ua{width:32px;height:32px;border-radius:50%;background:var(--g900);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.un{font-size:12px;font-weight:700;color:var(--g900);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ur{font-size:10px;color:var(--g400);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lob{background:none;border:none;color:var(--g400);cursor:pointer;font-size:14px;padding:4px;margin-left:auto;transition:color .15s;border-radius:3px}
+.lob:hover{color:var(--red)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--g50)}
+.topbar{height:56px;background:var(--w);border-bottom:var(--bd);display:flex;align-items:center;padding:0 28px;gap:12px;flex-shrink:0}
+.pt{font-family:var(--F);font-size:15px;font-weight:800;color:var(--g900);flex:1;letter-spacing:-.3px}
+.tbb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;border:var(--bd);background:var(--w);color:var(--g700)}
+.tbb:hover{border-color:var(--g400);color:var(--g900)}
+.tbb.p{background:var(--g900);border-color:var(--g900);color:#fff}
+.tbb.p:hover{background:var(--red);border-color:var(--red)}
+.content{flex:1;overflow-y:auto;padding:28px}
+
+/* NOTIFS */
+#nc{position:fixed;top:14px;right:14px;z-index:9000;display:flex;flex-direction:column;gap:7px}
+.notif{background:var(--w);border:var(--bd);border-radius:var(--r2);padding:13px 15px;min-width:290px;max-width:340px;display:flex;align-items:flex-start;gap:11px;box-shadow:var(--sh2);animation:nfIn .22s ease}
+.notif.success{border-left:3px solid var(--green)}
+.notif.error{border-left:3px solid var(--red)}
+.notif.warning{border-left:3px solid var(--amber)}
+.notif.info{border-left:3px solid var(--blue)}
+.nt{font-size:13px;font-weight:700;color:var(--g900);margin-bottom:1px}
+.nm{font-size:11px;color:var(--g400)}
+.nc{background:none;border:none;color:var(--g300);cursor:pointer;margin-left:auto;font-size:13px}
+.nc:hover{color:var(--g900)}
+@keyframes nfIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+
+/* DASHBOARD */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.sc{background:var(--w);border:var(--bd);border-radius:var(--r2);padding:22px 20px;position:relative;overflow:hidden;transition:box-shadow .15s}
+.sc:hover{box-shadow:var(--sh)}
+.sa{position:absolute;top:0;left:0;right:0;height:3px}
+.sa.bk{background:var(--g900)}.sa.rd{background:var(--red)}.sa.gn{background:var(--green)}.sa.bl{background:var(--blue)}
+.sl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g400);margin-bottom:8px}
+.sv{font-family:var(--F);font-size:38px;font-weight:900;color:var(--g900);line-height:1;letter-spacing:-2px}
+.ss{font-size:11px;color:var(--g400);margin-top:5px}
+.qg{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.qc{background:var(--w);border:var(--bd);border-radius:var(--r2);padding:20px;transition:box-shadow .15s}
+.qc:hover{box-shadow:var(--sh)}
+.qct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.qcl{font-size:13px;font-weight:800;color:var(--g900)}
+.qcp{font-size:10px;color:var(--g400);margin-top:2px}
+.qpct{font-family:var(--F);font-size:26px;font-weight:900;color:var(--g900);letter-spacing:-1px}
+.qt{height:3px;background:var(--g100);border-radius:2px;margin-bottom:14px}
+.qf{height:3px;border-radius:2px;background:var(--red);transition:width .5s}
+.qrs{display:flex;flex-direction:column;gap:8px}
+.qr{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.qrn{font-size:12px;color:var(--g500);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp{font-size:10px;font-weight:600;letter-spacing:.4px;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.sd{background:var(--green-lt);color:var(--green)}
+.si{background:var(--blue-lt);color:var(--blue)}
+.sn{background:var(--g100);color:var(--g400)}
+.so{background:var(--red-lt);color:var(--red)}
+
+/* TOOLBAR */
+.tb{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.sb{flex:1;min-width:200px;background:var(--w);border:var(--bd);border-radius:var(--r);padding:9px 13px;font-size:13px;font-family:var(--F);color:var(--g900);outline:none;transition:border-color .15s}
+.sb:focus{border-color:var(--g900)}
+.fw{position:relative}
+.fb{display:flex;align-items:center;gap:6px;background:var(--w);border:var(--bd);border-radius:var(--r);padding:9px 13px;font-size:12px;font-weight:600;color:var(--g700);cursor:pointer;transition:all .12s;white-space:nowrap}
+.fb:hover{border-color:var(--g900);color:var(--g900)}
+.fb.act{background:var(--g900);border-color:var(--g900);color:#fff}
+.fd{position:absolute;top:calc(100% + 5px);left:0;background:var(--w);border:var(--bd);border-radius:var(--r2);padding:5px;min-width:190px;z-index:200;display:none;box-shadow:var(--sh2)}
+.fd.open{display:block}
+.fci{font-size:12px;font-weight:500;color:var(--g700);padding:7px 9px;border-radius:var(--r);cursor:pointer;display:flex;justify-content:space-between;transition:background .1s}
+.fci:hover{background:var(--g50);color:var(--g900)}
+.fsub{display:none;padding:3px 0 3px 8px;border-left:2px solid var(--g100);margin:1px 7px 3px}
+.fsub.open{display:block}
+.fchk{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--g500);padding:5px 7px;border-radius:var(--r);cursor:pointer}
+.fchk:hover{background:var(--g50);color:var(--g900)}
+.fchk input{accent-color:var(--red)}
+.drange{padding:5px 7px;display:flex;flex-direction:column;gap:7px}
+.drange label{font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:1px}
+.drange input{background:var(--g50);border:var(--bd);border-radius:var(--r);padding:6px 9px;color:var(--g900);font-size:12px;width:100%;outline:none}
+.fca{width:100%;padding:7px;font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--red);background:none;border:none;cursor:pointer;border-top:var(--bd);margin-top:3px}
+
+/* GROUP HEADERS */
+.qgrp{margin-bottom:28px}
+.qgh{display:flex;align-items:center;gap:12px;padding-bottom:10px;margin-bottom:8px;border-bottom:var(--bd)}
+.qgl{font-size:10px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--g900)}
+.qgc{font-family:var(--M);font-size:10px;color:var(--g400);background:var(--g100);padding:2px 7px;border-radius:2px}
+.qgbar{flex:1;height:2px;background:var(--g100);border-radius:1px}
+.qgfill{height:2px;background:var(--red);border-radius:1px;transition:width .4s}
+
+/* ITEM CARDS */
+.ic{background:var(--w);border:var(--bd);border-radius:var(--r2);margin-bottom:7px;transition:box-shadow .15s,border-color .15s;overflow:hidden}
+.ic:hover{box-shadow:var(--sh);border-color:var(--g300)}
+.ic.ov{border-left:3px solid var(--red)}
+.ic.hi{border-left:3px solid var(--amber)}
+.ch{display:flex;align-items:center;gap:11px;padding:13px 15px;cursor:pointer;user-select:none}
+.xb{width:20px;height:20px;border-radius:50%;background:var(--g100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--g400);flex-shrink:0;transition:all .15s}
+.xb:hover{background:var(--g200);color:var(--g900)}
+.xb.o{background:var(--g900);color:#fff;font-size:9px}
+.chips{display:flex;gap:5px;flex-shrink:0;align-items:center}
+.chip{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 7px;border-radius:2px}
+.ckr{background:var(--g900);color:#fff}
+.ccp{background:var(--blue-lt);color:var(--blue);border:1px solid #c5d9f2}
+.ctz{background:var(--g100);color:var(--g500)}
+.cez{background:var(--green-lt);color:var(--green)}
+.cmz{background:var(--amber-lt);color:var(--amber)}
+.cdz{background:var(--red-lt);color:var(--red)}
+.phi{color:var(--red);background:var(--red-lt)}
+.pmd{color:var(--amber);background:var(--amber-lt)}
+.plo{color:var(--g400);background:var(--g100)}
+.pov{background:var(--red);color:#fff}
+.ct{flex:1;font-size:13px;font-weight:500;color:var(--g900);line-height:1.4;min-width:0}
+.cpar{font-size:10px;color:var(--g400);font-family:var(--M);margin-right:3px}
+.cr{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.cper{font-size:11px;color:var(--g400);font-family:var(--M);white-space:nowrap}
+.mpw{display:flex;align-items:center;gap:7px}
+.mtr{width:60px;height:3px;background:var(--g100);border-radius:2px}
+.mf{height:3px;border-radius:2px;background:var(--g900);transition:width .3s}
+.mf.dn{background:var(--green)}.mf.ov2{background:var(--red)}
+.cpct{font-family:var(--M);font-size:11px;color:var(--g500);width:30px;text-align:right}
+.ca{display:flex;gap:2px}
+.ib{background:none;border:none;padding:5px 6px;border-radius:var(--r);cursor:pointer;font-size:13px;color:var(--g300);transition:all .12s}
+.ib:hover{background:var(--g100);color:var(--g700)}
+.ib.dl:hover{color:var(--red);background:var(--red-lt)}
+
+/* EXPANDED PANEL */
+.ip{display:none;border-top:var(--bd);background:var(--g50);padding:18px 20px 22px}
+.ip.open{display:block}
+.pcols{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.slbl{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--g400);margin-bottom:7px;display:block}
+.pdesc{font-size:13px;color:var(--g500);line-height:1.65;background:var(--w);border:var(--bd);border-radius:var(--r);padding:11px 13px}
+.ph{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.pnum{font-family:var(--F);font-size:30px;font-weight:900;color:var(--g900);letter-spacing:-1px}
+.ptrack{height:5px;background:var(--g200);border-radius:3px;margin-bottom:12px}
+.pfill{height:5px;border-radius:3px;background:var(--g900);transition:width .4s}
+.pfill.dn{background:var(--green)}.pfill.ov2{background:var(--red)}
+.crow{display:flex;align-items:center;justify-content:space-between;background:var(--w);border:var(--bd);border-radius:var(--r);padding:9px 13px}
+.clbl{font-size:12px;color:var(--g500)}
+.cctrl{display:flex;align-items:center;gap:9px}
+.cbb{width:28px;height:28px;border-radius:var(--r);background:var(--g100);border:var(--bd);font-size:16px;color:var(--g700);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;font-family:var(--M)}
+.cbb:hover{background:var(--g900);color:#fff;border-color:var(--g900)}
+.cval{font-family:var(--F);font-size:16px;font-weight:800;color:var(--g900);min-width:64px;text-align:center}
+.cklist{display:flex;flex-direction:column;gap:5px;margin-bottom:7px}
+.cki{display:flex;align-items:center;gap:9px;background:var(--w);border:var(--bd);border-radius:var(--r);padding:8px 11px;transition:border-color .12s}
+.cki:hover{border-color:var(--g300)}
+.cki.ckd{opacity:.55}
+.cki input{accent-color:var(--g900);flex-shrink:0;cursor:pointer}
+.cki label{font-size:12px;color:var(--g600);cursor:pointer;flex:1;line-height:1.4}
+.cki.ckd label{text-decoration:line-through;color:var(--g400)}
+.cki .rb{background:none;border:none;color:var(--g300);cursor:pointer;font-size:11px;padding:2px}
+.cki .rb:hover{color:var(--red)}
+.ack{display:flex;gap:5px;margin-top:2px}
+.ack input{flex:1;background:var(--w);border:var(--bd);border-radius:var(--r);padding:7px 11px;font-size:12px;color:var(--g900);outline:none;font-family:var(--F)}
+.ack input:focus{border-color:var(--g900)}
+.ack button{background:var(--g900);border:none;border-radius:var(--r);padding:7px 13px;color:#fff;font-size:13px;cursor:pointer;transition:background .12s}
+.ack button:hover{background:var(--red)}
+.esec{margin-top:14px;padding-top:14px;border-top:var(--bd)}
+.egrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
+.ei{background:var(--w);border:var(--bd);border-radius:var(--r);padding:8px 11px;font-size:13px;font-family:var(--F);color:var(--g900);outline:none;width:100%}
+.ei:focus{border-color:var(--g900)}
+.eta{resize:vertical;min-height:65px;grid-column:1/-1}
+.esel{background:var(--w);border:var(--bd);border-radius:var(--r);padding:8px 11px;font-size:12px;font-family:var(--M);color:var(--g900);outline:none;cursor:pointer}
+.sbt{background:var(--green);border:none;border-radius:var(--r);padding:8px 16px;color:#fff;font-size:12px;font-weight:800;cursor:pointer;transition:opacity .15s;letter-spacing:.4px;grid-column:1/-1}
+.sbt:hover{opacity:.85}
+.cptog{display:flex;align-items:center;gap:11px;background:var(--w);border:var(--bd);border-radius:var(--r);padding:11px 13px}
+.cptog input{accent-color:var(--blue);width:17px;height:17px;cursor:pointer}
+.cptog label{font-size:13px;color:var(--g700);cursor:pointer;flex:1}
+.cptog label.dn{text-decoration:line-through;color:var(--g400)}
+.hbdg{font-family:var(--M);font-size:11px;color:var(--g400);background:var(--g100);padding:2px 8px;border-radius:2px}
+.sgtog{display:flex;align-items:center;gap:10px;background:var(--w);border:var(--bd);border-radius:var(--r);padding:10px 13px}
+.sgtog input{width:17px;height:17px;accent-color:var(--g900);cursor:pointer}
+.sgtog label{font-size:13px;color:var(--g500);cursor:pointer;flex:1}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(3px);z-index:5000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.mo.open{opacity:1;pointer-events:all}
+.mb{background:var(--w);border:var(--bd);border-radius:var(--r2);width:540px;max-width:96vw;max-height:88vh;overflow-y:auto;box-shadow:var(--sh2);transform:translateY(14px);transition:transform .2s}
+.mo.open .mb{transform:translateY(0)}
+.mhd{padding:26px 30px 18px;border-bottom:var(--bd);display:flex;justify-content:space-between;align-items:flex-start}
+.mt{font-size:19px;font-weight:900;color:var(--g900);letter-spacing:-.5px}
+.ms{font-size:12px;color:var(--g400);margin-top:3px}
+.mcl{background:none;border:none;font-size:17px;color:var(--g400);cursor:pointer;padding:4px}
+.mcl:hover{color:var(--g900)}
+.mbody{padding:22px 30px 30px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fr.s1{grid-template-columns:1fr}
+.ff{display:flex;flex-direction:column;gap:5px}
+.fml{font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:1.5px}
+.fmi,.fmsel,.fmta{background:var(--g50);border:var(--bd);border-radius:var(--r);padding:9px 11px;font-size:13px;font-family:var(--F);color:var(--g900);outline:none;width:100%}
+.fmi:focus,.fmta:focus{border-color:var(--g900);background:var(--w)}
+.fmsel{cursor:pointer}
+.fmta{resize:vertical;min-height:75px}
+.mact{display:flex;justify-content:flex-end;gap:9px;padding-top:18px;border-top:var(--bd);margin-top:6px}
+.bcan{background:var(--w);border:var(--bd);border-radius:var(--r);padding:9px 18px;font-size:13px;font-weight:600;color:var(--g500);cursor:pointer}
+.bcan:hover{color:var(--g900);border-color:var(--g400)}
+.bcr{background:var(--g900);border:1px solid var(--g900);border-radius:var(--r);padding:9px 22px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;font-family:var(--F);transition:background .15s}
+.bcr:hover{background:var(--red);border-color:var(--red)}
+</style>
+</head>
+<body>
+
+<div id="nc"></div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="auth-wrap">
+    <div class="auth-L">
+      <div class="auth-grid"></div>
+      <div class="auth-badge">I+D+I · 2026</div>
+      <div class="auth-h">OKR<br>Platform</div>
+      <div class="auth-sub">Gestión de objetivos para<br>el equipo de Innovación<br>de Soventix Caribbean.</div>
+    </div>
+    <div class="auth-R">
+      <div class="auth-ft">Iniciar sesión</div>
+      <div class="auth-fs">Accede a tu espacio de trabajo</div>
+      <label class="fl">Correo electrónico</label>
+      <input class="fi" id="le" type="email" placeholder="tu@correo.com" autocomplete="email">
+      <label class="fl">Contraseña</label>
+      <input class="fi" id="lp" type="password" placeholder="••••••••" autocomplete="current-password">
+      <button class="auth-btn" onclick="doLogin()">Continuar →</button>
+      <div class="auth-err" id="lerr"></div>
+      <hr class="auth-div">
+      <div class="auth-sw">¿Sin cuenta? <a onclick="showReg()">Regístrate aquí</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="register-screen" class="hidden">
+  <div class="auth-wrap">
+    <div class="auth-L">
+      <div class="auth-grid"></div>
+      <div class="auth-badge">I+D+I · 2026</div>
+      <div class="auth-h">Nueva<br>Cuenta</div>
+      <div class="auth-sub">Registra tu usuario y comienza<br>a gestionar tus OKRs del año.</div>
+    </div>
+    <div class="auth-R">
+      <div class="auth-ft">Crear cuenta</div>
+      <div class="auth-fs">Completa tus datos para comenzar</div>
+      <label class="fl">Nombre completo</label>
+      <input class="fi" id="rn" type="text" placeholder="Tu nombre">
+      <label class="fl">Correo electrónico</label>
+      <input class="fi" id="re" type="email" placeholder="tu@correo.com">
+      <label class="fl">Contraseña</label>
+      <input class="fi" id="rp" type="password" placeholder="Mínimo 6 caracteres">
+      <label class="fl">Cargo / Rol</label>
+      <input class="fi" id="rr" type="text" placeholder="ej: Analista de Innovación">
+      <button class="auth-btn" onclick="doReg()">Crear cuenta →</button>
+      <div class="auth-err" id="rerr"></div>
+      <hr class="auth-div">
+      <div class="auth-sw"><a onclick="showLogin()">← Volver al login</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar">
+    <div class="sb-head">
+      <div class="sb-wm">OKR<span>Hub</span></div>
+      <div class="sb-tag">2026</div>
+    </div>
+    <div class="nav-sec">
+      <div class="nav-lbl">Vistas</div>
+      <div class="nav-item active" onclick="gp('dashboard')"><span class="nav-ico">◫</span> Dashboard</div>
+      <div class="nav-item" onclick="gp('okrs')"><span class="nav-ico">◎</span> Mis OKRs</div>
+      <div class="nav-item" onclick="gp('caps')"><span class="nav-ico">▣</span> Capacitaciones</div>
+    </div>
+    <div class="sb-foot">
+      <div class="uc">
+        <div class="ua" id="sba">?</div>
+        <div style="min-width:0">
+          <div class="un" id="sbn">—</div>
+          <div class="ur" id="sbr">—</div>
+        </div>
+        <button class="lob" title="Cerrar sesión" onclick="doLogout()">⏻</button>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div class="pt" id="ttl">Dashboard</div>
+      <button class="tbb" onclick="reqNotif()">🔔 Alertas</button>
+      <button class="tbb p" id="addb" onclick="openModal()" style="display:none">+ Agregar</button>
+    </div>
+    <div class="content" id="ca"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="mo" id="mo">
+  <div class="mb">
+    <div class="mhd">
+      <div><div class="mt">Nuevo elemento</div><div class="ms">Agrega un OKR, Capacitación o Tarea</div></div>
+      <button class="mcl" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="fr">
+        <div class="ff"><label class="fml">Tipo</label><select class="fmsel" id="at" onchange="atc()"><option value="okr">OKR</option><option value="cap">Capacitación</option><option value="task">Tarea</option></select></div>
+        <div class="ff"><label class="fml">Trimestre</label><select class="fmsel" id="aq"><option value="Q1">Q1 — Ene a Mar</option><option value="Q2">Q2 — Abr a Jun</option><option value="Q3">Q3 — Jul a Sep</option><option value="Q4">Q4 — Oct a Dic</option><option value="Anual">Anual</option></select></div>
+      </div>
+      <div class="fr s1"><div class="ff"><label class="fml">Título</label><input class="fmi" id="atl" type="text" placeholder="Describe el objetivo"></div></div>
+      <div class="fr">
+        <div class="ff"><label class="fml">Objetivo padre (O#)</label><input class="fmi" id="apar" type="text" placeholder="ej: O1 (opcional)"></div>
+        <div class="ff"><label class="fml">Dificultad</label><select class="fmsel" id="adf"><option>FÁCIL</option><option selected>MEDIO</option><option>DIFÍCIL</option></select></div>
+      </div>
+      <div class="fr s1"><div class="ff"><label class="fml">Descripción / Pasos necesarios</label><textarea class="fmta" id="adesc" placeholder="¿Qué necesitas hacer para lograrlo?"></textarea></div></div>
+      <div id="okrf">
+        <div class="fr">
+          <div class="ff"><label class="fml">Tipo de medición</label><select class="fmsel" id="am" onchange="amc()"><option value="checklist">Checklist de pasos</option><option value="counter">Contador numérico</option><option value="single">Objetivo único (Sí/No)</option></select></div>
+          <div class="ff" id="atf"><label class="fml">Meta numérica</label><input class="fmi" id="atgt" type="number" value="1" placeholder="ej: 10"></div>
+        </div>
+      </div>
+      <div class="fr">
+        <div class="ff"><label class="fml">Fecha límite</label><input class="fmi" id="adl" type="date"></div>
+        <div class="ff" id="ahf" style="display:none"><label class="fml">Horas del curso</label><input class="fmi" id="ahs" type="number" value="2" placeholder="ej: 4"></div>
+      </div>
+      <div class="mact"><button class="bcan" onclick="closeModal()">Cancelar</button><button class="bcr" onclick="confAdd()">Crear elemento</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const LUCAS='lucasyamilpereyram@gmail.com';
+let CU=null;
+const GU=()=>{try{return JSON.parse(localStorage.getItem('okr_u')||'{}')}catch{return{}}};
+const SU=u=>localStorage.setItem('okr_u',JSON.stringify(u));
+const GD=()=>{try{return JSON.parse(localStorage.getItem('okr_d_'+CU)||'null')||{name:'',role:'',okrs:[],caps:[]}}catch{return{name:'',role:'',okrs:[],caps:[]}}};
+const SD=d=>localStorage.setItem('okr_d_'+CU,JSON.stringify(d));
+
+function LD(){
+  const D=(m,d)=>new Date(2026,m-1,d).toISOString().split('T')[0];
+  return{name:'Lucas Pereyra',role:'Analista de Innovación',okrs:[
+  {id:'o1k1',type:'okr',parent:'O1',q:'Q1',period:'Mar 2026',diff:'DIFÍCIL',deadline:D(3,31),measure:'checklist',target:3,current:0,desc:'Implementar sistema de seguimiento por idea (entrada → decisión). Definir SLA de 28 días. Revisar pipeline cada lunes. No dejar ninguna idea sin respuesta más de 4 semanas.',checklist:[{id:'a',text:'Crear tracker de ideas (Notion/Excel)',done:false},{id:'b',text:'Definir criterios de evaluación documentados',done:false},{id:'c',text:'Revisión semanal de pipeline cada lunes',done:false}],overdue:false,title:'Mantener 100% de ideas evaluadas en ≤4 semanas desde recepción'},
+  {id:'o1k2',type:'okr',parent:'O1',q:'Q4',period:'Anual',diff:'MEDIO',deadline:D(12,31),measure:'counter',target:50,current:0,desc:'Promover la plataforma de innovación activamente. Facilitar sesiones de ideación. Reducir fricción para proponer ideas. Destacar casos de éxito implementados.',checklist:[],overdue:false,title:'Recibir 50+ ideas/experimentos propuestos en el año'},
+  {id:'o1k3',type:'okr',parent:'O1',q:'Q4',period:'Anual',diff:'DIFÍCIL',deadline:D(12,31),measure:'counter',target:30,current:0,desc:'Por cada idea: entrevista con el proponente + análisis de impacto (valor, costo, esfuerzo, riesgo). Usar plantilla estándar. Documentar en repositorio centralizado.',checklist:[],overdue:false,title:'Completar 30+ análisis de impacto documentados (incluye entrevista por idea)'},
+  {id:'o1k4',type:'okr',parent:'O1',q:'Q4',period:'Anual',diff:'FÁCIL',deadline:D(12,31),measure:'counter',target:12,current:0,desc:'Actualizar dashboard la primera semana de cada mes. Incluir: ideas recibidas, en evaluación, aprobadas, rechazadas, implementadas. Compartir con equipo y dirección.',checklist:[],overdue:false,title:'Mantener portafolio de innovación y dashboard de KPIs con revisiones mensuales'},
+  {id:'o1k5',type:'okr',parent:'O1',q:'Q2',period:'Apr 2026',diff:'DIFÍCIL',deadline:D(6,30),measure:'checklist',target:3,current:0,desc:'Auditar cola actual. Priorizar ideas más antiguas. Proceso de evaluación exprés para ideas simples. Buscar apoyo del equipo si el volumen supera la capacidad.',checklist:[{id:'a',text:'Auditar ideas actuales en cola',done:false},{id:'b',text:'Implementar evaluación exprés para ideas simples',done:false},{id:'c',text:'Establecer SLA de respuesta documentado',done:false}],overdue:false,title:'Reducir ideas en cola sin evaluar de 50% a <20%'},
+  {id:'o1k6',type:'okr',parent:'O1',q:'Q4',period:'Anual',diff:'MEDIO',deadline:D(12,31),measure:'counter',target:2,current:0,desc:'Documentar fricciones encontradas al evaluar ideas. Proponer mejoras concretas: formato, criterios, herramientas, tiempos. Presentar al equipo para validación e implementación.',checklist:[],overdue:false,title:'Proponer 2+ mejoras al proceso de evaluación de ideas'},
+  {id:'o2k1',type:'okr',parent:'O2',q:'Q4',period:'Anual',diff:'DIFÍCIL',deadline:D(12,31),measure:'counter',target:3,current:0,desc:'Identificar departamentos que no han participado. Hacer visitas proactivas. Facilitar sesiones de ideación personalizadas por área. Seguimiento post-sesión.',checklist:[],overdue:false,title:'Lograr participación de 3+ departamentos nuevos en propuestas de ideas'},
+  {id:'o2k2',type:'okr',parent:'O2',q:'Q4',period:'Anual',diff:'MEDIO',deadline:D(12,31),measure:'counter',target:15,current:0,desc:'Usar boletines, presentaciones en reuniones de equipo y comunicación directa. Destacar casos de éxito. Hacer el proceso de propuesta lo más sencillo posible.',checklist:[],overdue:false,title:'Motivar 15+ personas nuevas a proponer ideas en la plataforma'},
+  {id:'o2k3',type:'okr',parent:'O2',q:'Q2',period:'Q2',diff:'DIFÍCIL',deadline:D(6,30),measure:'checklist',target:5,current:0,desc:'Coordinar logística del evento. Definir agenda, ponentes, dinámica de networking y exposición de proyectos. Preparar encuesta de satisfacción post-evento.',checklist:[{id:'a',text:'Definir fecha y lugar del evento',done:false},{id:'b',text:'Crear agenda completa del día',done:false},{id:'c',text:'Gestionar invitaciones y confirmaciones (meta 50+)',done:false},{id:'d',text:'Preparar materiales y presentaciones',done:false},{id:'e',text:'Aplicar encuesta de satisfacción post-evento',done:false}],overdue:false,title:'Co-organizar Innovation Day 2026 con 50+ asistentes y 90%+ satisfacción'},
+  {id:'o2k4',type:'okr',parent:'O2',q:'Q4',period:'Anual',diff:'FÁCIL',deadline:D(12,31),measure:'counter',target:4,current:0,desc:'Programar reuniones del Comité (una por trimestre). Preparar agenda, gestionar participantes, tomar actas y distribuirlas. Dar seguimiento a acuerdos.',checklist:[],overdue:false,title:'Realizar 4+ reuniones de Comité de I+D+I con actas documentadas'},
+  {id:'o3k1',type:'okr',parent:'O3',q:'Q1',period:'Q1',diff:'DIFÍCIL',deadline:D(3,31),measure:'checklist',target:4,current:0,desc:'Coordinar con equipo de Ingeniería. Documentar estándares NEC actuales y flujo de trabajo. Identificar brechas. Entregar documento validado por los stakeholders.',checklist:[{id:'a',text:'Agendar reuniones con Ingeniería',done:false},{id:'b',text:'Conducir entrevistas de levantamiento',done:false},{id:'c',text:'Documentar estándares NEC identificados',done:false},{id:'d',text:'Validar documento con stakeholders',done:false}],overdue:false,title:'Completar levantamiento de estándares NEC y flujo actual de Ingeniería'},
+  {id:'o3k2',type:'okr',parent:'O3',q:'Q2',period:'Q2',diff:'DIFÍCIL',deadline:D(6,30),measure:'checklist',target:3,current:0,desc:'Analizar proceso actual de memorias técnicas. Proponer plantillas estándar, automatizaciones posibles y herramientas recomendadas. Presentar propuesta a Dirección/Ingeniería.',checklist:[{id:'a',text:'Analizar proceso actual de memorias técnicas',done:false},{id:'b',text:'Diseñar propuesta de estandarización y automatización',done:false},{id:'c',text:'Presentar propuesta al equipo e Ingeniería',done:false}],overdue:false,title:'Entregar propuesta de estandarización y automatización de memorias técnicas'},
+  {id:'o3k3',type:'okr',parent:'O3',q:'Q2',period:'Q2',diff:'DIFÍCIL',deadline:D(6,30),measure:'checklist',target:4,current:0,desc:'Coordinar con equipos de C+I. Hacer entrevistas. Documentar requerimientos funcionales y no funcionales del sistema de monitoreo.',checklist:[{id:'a',text:'Identificar stakeholders clave de C+I',done:false},{id:'b',text:'Realizar entrevistas de levantamiento',done:false},{id:'c',text:'Documentar requerimientos funcionales',done:false},{id:'d',text:'Validar requerimientos con el equipo',done:false}],overdue:false,title:'Completar levantamiento de requerimientos del Sistema de Monitoreo C+I'},
+  {id:'o3k4',type:'okr',parent:'O3',q:'Q3',period:'Q3',diff:'DIFÍCIL',deadline:D(9,30),measure:'checklist',target:3,current:0,desc:'Sintetizar investigación de C+I. Redactar documento ejecutivo con análisis, opciones de solución, recomendaciones y plan de acción. Presentar a Dirección.',checklist:[{id:'a',text:'Sintetizar toda la investigación de C+I',done:false},{id:'b',text:'Redactar documento ejecutivo con recomendaciones',done:false},{id:'c',text:'Presentar a Dirección',done:false}],overdue:false,title:'Entregar documento de investigación C+I con recomendaciones para Dirección'},
+  {id:'o3k5',type:'okr',parent:'O3',q:'Q4',period:'Anual',diff:'MEDIO',deadline:D(12,31),measure:'counter',target:5,current:0,desc:'Planificar entrevistas para cada proyecto de investigación. Preparar guía de entrevista, conducir la sesión, transcribir y documentar hallazgos.',checklist:[],overdue:false,title:'Realizar 5+ entrevistas de usuario para proyectos de investigación complejos'},
+  {id:'o3k6',type:'okr',parent:'O3',q:'Q1',period:'Febrero',diff:'MEDIO',deadline:D(2,28),measure:'checklist',target:3,current:0,desc:'Trabajar con Zorrilla para levantar requerimientos funcionales de La Forja. Definir historias de usuario, flujos y criterios de aceptación. Entregar documento validado.',checklist:[{id:'a',text:'Coordinar sesiones de trabajo con Zorrilla',done:false},{id:'b',text:'Documentar todos los requerimientos funcionales',done:false},{id:'c',text:'Validar con equipo y dirección',done:false}],overdue:true,title:'Completar levantamiento y definición de requerimientos de La Forja'},
+  {id:'o3k7',type:'okr',parent:'O3',q:'Q4',period:'Anual',diff:'FÁCIL',deadline:D(12,31),measure:'checklist',target:2,current:0,desc:'Evaluar trimestralmente si el volumen de trabajo requiere recursos adicionales. Documentar la justificación y presentar solicitud formal a Henfry si aplica.',checklist:[{id:'a',text:'Evaluar carga de trabajo cada trimestre',done:false},{id:'b',text:'Documentar y presentar justificación si aplica',done:false}],overdue:false,title:'Solicitar y justificar personal/recursos necesarios, si aplica'},
+  {id:'o4k1',type:'okr',parent:'O4',q:'Q4',period:'Anual',diff:'MEDIO',deadline:D(12,31),measure:'counter',target:10,current:0,desc:'Definir calendario editorial. Recopilar noticias de innovación, casos de éxito internos/externos, tendencias del sector. Redactar y distribuir mensualmente.',checklist:[],overdue:false,title:'Publicar 10+ boletines de innovación'},
+  {id:'o4k2',type:'okr',parent:'O4',q:'Q4',period:'Anual',diff:'MEDIO',deadline:D(12,31),measure:'checklist',target:3,current:0,desc:'Crear plantilla de encuesta de satisfacción. Definir proceso para aplicarla después de cada lanzamiento. Hacer seguimiento con usuarios. Reportar resultados al equipo.',checklist:[{id:'a',text:'Crear plantilla de encuesta estándar',done:false},{id:'b',text:'Definir proceso de aplicación post-lanzamiento',done:false},{id:'c',text:'Seguimiento hasta alcanzar tasa 90%+',done:false}],overdue:false,title:'Asegurar 90%+ de herramientas/soluciones con encuesta de satisfacción completada'},
+  {id:'o4k3',type:'okr',parent:'O4',q:'Q4',period:'Anual',diff:'MEDIO',deadline:D(12,31),measure:'counter',target:4,current:0,desc:'Al final de cada trimestre, analizar resultados de encuesta interna y preparar plan de mejoras. Compartir con Henfry para revisión e implementación.',checklist:[],overdue:false,title:'Presentar plan de mejoras basado en encuesta interna (1 por Q)'},
+  {id:'o4k4',type:'okr',parent:'O4',q:'Q4',period:'Anual',diff:'DIFÍCIL',deadline:D(12,31),measure:'checklist',target:3,current:0,desc:'Investigar grants, fondos de innovación, programas gubernamentales y organismos internacionales. Evaluar factibilidad para Soventix y preparar análisis completo.',checklist:[{id:'a',text:'Investigar fuentes de financiamiento disponibles',done:false},{id:'b',text:'Evaluar factibilidad para Soventix',done:false},{id:'c',text:'Presentar análisis a Henfry',done:false}],overdue:false,title:'Identificar 1+ fuente de financiamiento externo con análisis de factibilidad'},
+  {id:'o5k1',type:'okr',parent:'O5',q:'Q2',period:'Q2',diff:'DIFÍCIL',deadline:D(6,30),measure:'counter',target:2,current:0,desc:'Tomar ownership de al menos 2 iniciativas desde levantamiento hasta cierre. Aplicar metodología estructurada. Documentar el proceso completo.',checklist:[],overdue:false,title:'Liderar 2+ iniciativas completas de principio a fin (levantamiento → cierre)'},
+  {id:'o5k2',type:'okr',parent:'O5',q:'Q4',period:'Anual',diff:'MEDIO',deadline:D(12,31),measure:'counter',target:2,current:0,desc:'Aplicar al menos 2 metodologías distintas en proyectos reales. Documentar cuál se usó, por qué y qué resultados dio. Tener evidencia concreta de aplicación.',checklist:[],overdue:false,title:'Demostrar dominio de 2+ metodologías de gestión (Agile, Waterfall, Kanban, etc.)'},
+  {id:'o5k3',type:'okr',parent:'O5',q:'Q4',period:'Anual',diff:'MEDIO',deadline:D(12,31),measure:'checklist',target:4,current:0,desc:'Seguir el plan de capacitación trimestral de Platzi. Priorizar cursos esenciales. Registrar avance mensualmente y compartir con Henfry en 1:1.',checklist:[{id:'a',text:'Completar cursos esenciales Q1',done:false},{id:'b',text:'Completar cursos esenciales Q2',done:false},{id:'c',text:'Completar cursos esenciales Q3',done:false},{id:'d',text:'Completar cursos esenciales Q4',done:false}],overdue:false,title:'Completar ≥80% del plan de capacitación individual asignado'},
+  {id:'o6k1',type:'okr',parent:'O6',q:'Q3',period:'Q3',diff:'MEDIO',deadline:D(9,30),measure:'checklist',target:3,current:0,desc:'Explorar procesos del departamento/empresa candidatos a automatización con agentes IA. Documentar caso de uso, impacto potencial y viabilidad técnica.',checklist:[{id:'a',text:'Mapear procesos candidatos a automatización',done:false},{id:'b',text:'Evaluar viabilidad con agentes IA',done:false},{id:'c',text:'Documentar caso de uso seleccionado',done:false}],overdue:false,title:'Identificar 1+ caso de uso viable para automatización con agentes IA'},
+  {id:'o6k2',type:'okr',parent:'O6',q:'Q4',period:'Q3-Q4',diff:'MEDIO',deadline:D(12,31),measure:'checklist',target:3,current:0,desc:'Apoyar a Henfry en análisis de modelos de negocio potenciales (EaaS, servicios digitales). Usar Business Model Canvas. Aportar perspectiva de innovación.',checklist:[{id:'a',text:'Definir modelo a analizar junto a Henfry',done:false},{id:'b',text:'Aplicar Business Model Canvas',done:false},{id:'c',text:'Presentar análisis a Dirección',done:false}],overdue:false,title:'Asistir en análisis de 1+ modelo de nuevo negocio (si aplica)'},
+  {id:'o7k1',type:'okr',parent:'O7',q:'Q1',period:'Q1',diff:'DIFÍCIL',deadline:D(3,31),measure:'checklist',target:4,current:0,desc:'Mapear el proceso actual de análisis de ideas de principio a fin. Documentar criterios de evaluación, matriz de decisión y flujo completo. Base para el Agente Analista.',checklist:[{id:'a',text:'Mapear proceso actual de análisis de ideas',done:false},{id:'b',text:'Definir criterios de evaluación formales',done:false},{id:'c',text:'Crear matriz de decisión documentada',done:false},{id:'d',text:'Validar flujo completo con el equipo',done:false}],overdue:false,title:'Documentar 100% del proceso de análisis de ideas (criterios, matriz, flujo)'},
+  {id:'o7k2',type:'okr',parent:'O7',q:'Q2',period:'Q2',diff:'DIFÍCIL',deadline:D(6,30),measure:'checklist',target:3,current:0,desc:'Basado en la documentación del proceso, crear los casos de uso del agente. Redactar prompts base con ejemplos concretos de ideas reales. Validar con evaluación manual.',checklist:[{id:'a',text:'Definir casos de uso del agente analista',done:false},{id:'b',text:'Redactar prompts base con ejemplos reales',done:false},{id:'c',text:'Validar prompts con evaluaciones manuales',done:false}],overdue:false,title:'Definir casos de uso y prompts base del agente con ejemplos validados'},
+  {id:'o7k3',type:'okr',parent:'O7',q:'Q3',period:'Julio',diff:'DIFÍCIL',deadline:D(7,31),measure:'checklist',target:4,current:0,desc:'Preparar set de prueba (mínimo 20 ideas). Hacer evaluación manual y con el agente. Comparar resultados. Si accuracy < 80%, identificar errores y proponer correcciones.',checklist:[{id:'a',text:'Preparar set de prueba con 20+ ideas',done:false},{id:'b',text:'Hacer evaluación manual del set completo',done:false},{id:'c',text:'Comparar con evaluación del agente',done:false},{id:'d',text:'Documentar resultados y plan de mejora si aplica',done:false}],overdue:false,title:'Validar accuracy del agente ≥80% vs evaluación manual propia'}
+  ],caps:[
+  {id:'cq1-1',type:'cap',q:'Q1',title:'User Research: Técnicas Efectivas',hrs:5,done:false,diff:'MEDIO',deadline:D(3,31),desc:'Técnicas de investigación de usuarios para proyectos de innovación.'},
+  {id:'cq1-2',type:'cap',q:'Q1',title:'Comunicación Estratégica para Empresas',hrs:2,done:false,diff:'FÁCIL',deadline:D(3,31),desc:'Comunicar ideas y propuestas de forma efectiva a distintos públicos.'},
+  {id:'cq1-3',type:'cap',q:'Q1',title:'Métricas Esenciales de Negocio',hrs:2,done:false,diff:'FÁCIL',deadline:D(3,31),desc:'Métricas clave para medir el impacto de innovación en la organización.'},
+  {id:'cq1-4',type:'cap',q:'Q1',title:'Fundamentos de Product Owner',hrs:2,done:false,diff:'FÁCIL',deadline:D(3,31),desc:'Base conceptual para gestionar el pipeline de ideas y productos.'},
+  {id:'cq1-5',type:'cap',q:'Q1',title:'Prompt Engineering',hrs:3,done:false,diff:'MEDIO',deadline:D(3,31),desc:'Esencial para el desarrollo del Agente Analista de Innovación (O7).'},
+  {id:'cq1-6',type:'cap',q:'Q1',title:'Scrum Profesional',hrs:2,done:false,diff:'FÁCIL',deadline:D(3,31),desc:'Metodología ágil para gestionar proyectos de innovación.'},
+  {id:'cq1-7',type:'cap',q:'Q1',title:'ChatGPT / Claude AI / Gemini',hrs:4,done:false,diff:'FÁCIL',deadline:D(3,31),desc:'Dominar las herramientas de IA conversacional más importantes del mercado.'},
+  {id:'cq1-8',type:'cap',q:'Q1',title:'Business Model Canvas',hrs:3,done:false,diff:'FÁCIL',deadline:D(3,31),desc:'Herramienta para análisis de modelos de negocio (O6).'},
+  {id:'cq1-9',type:'cap',q:'Q1',title:'Innovación para el Futuro y Coolhunting',hrs:3,done:false,diff:'FÁCIL',deadline:D(3,31),desc:'Técnicas para detectar tendencias emergentes.'},
+  {id:'cq1-10',type:'cap',q:'Q1',title:'Análisis de Datos para Gestión de Proyectos',hrs:2,done:false,diff:'MEDIO',deadline:D(3,31),desc:'Usar datos para tomar mejores decisiones en proyectos.'},
+  {id:'cq1-11',type:'cap',q:'Q1',title:'Creatividad e Innovación',hrs:3,done:false,diff:'FÁCIL',deadline:D(3,31),desc:'Técnicas para fomentar la creatividad en equipos.'},
+  {id:'cq1-12',type:'cap',q:'Q1',title:'Comunicación Efectiva (Audio)',hrs:1,done:false,diff:'FÁCIL',deadline:D(3,31),desc:'Mejora la comunicación verbal y presentaciones orales.'},
+  {id:'cq2-1',type:'cap',q:'Q2',title:'Product Management',hrs:4,done:false,diff:'MEDIO',deadline:D(6,30),desc:'Gestión de productos digitales — clave para el rol de Coordinador.'},
+  {id:'cq2-2',type:'cap',q:'Q2',title:'Design Thinking',hrs:3,done:false,diff:'MEDIO',deadline:D(6,30),desc:'Metodología de diseño centrado en el usuario.'},
+  {id:'cq2-3',type:'cap',q:'Q2',title:'Agentes AI',hrs:4,done:false,diff:'DIFÍCIL',deadline:D(6,30),desc:'Crucial para el OKR del Agente Analista de Innovación (O7).'},
+  {id:'cq2-4',type:'cap',q:'Q2',title:'Gestión de Equipos Ágiles',hrs:3,done:false,diff:'MEDIO',deadline:D(6,30),desc:'Liderazgo de equipos con metodologías ágiles.'},
+  {id:'cq2-5',type:'cap',q:'Q2',title:'Presentaciones Ejecutivas',hrs:2,done:false,diff:'FÁCIL',deadline:D(6,30),desc:'Comunicar resultados e impacto a Dirección con claridad.'},
+  {id:'cq2-6',type:'cap',q:'Q2',title:'Gestión Efectiva del Tiempo',hrs:1,done:false,diff:'FÁCIL',deadline:D(6,30),desc:'Optimizar el tiempo para manejar múltiples OKRs simultáneos.'},
+  {id:'cq2-7',type:'cap',q:'Q2',title:'Habilidades y Estrategias de Coaching',hrs:3,done:false,diff:'MEDIO',deadline:D(6,30),desc:'Mentoría y desarrollo de equipos de innovación.'},
+  {id:'cq2-8',type:'cap',q:'Q2',title:'Fundamentos de Project Management',hrs:3,done:false,diff:'FÁCIL',deadline:D(6,30),desc:'Base formal de gestión de proyectos.'},
+  {id:'cq2-9',type:'cap',q:'Q2',title:'Design Sprint Aplicado',hrs:3,done:false,diff:'MEDIO',deadline:D(6,30),desc:'Metodología Google para resolver problemas rápidamente.'},
+  {id:'cq2-10',type:'cap',q:'Q2',title:'Pensamiento Crítico',hrs:2,done:false,diff:'FÁCIL',deadline:D(6,30),desc:'Base del análisis de ideas e investigación de proyectos.'},
+  {id:'cq2-11',type:'cap',q:'Q2',title:'Herramientas No-Code',hrs:2,done:false,diff:'FÁCIL',deadline:D(6,30),desc:'Crear soluciones sin código para validar ideas rápido.'},
+  {id:'cq2-12',type:'cap',q:'Q2',title:'Introducción a la Inteligencia Artificial',hrs:2,done:false,diff:'FÁCIL',deadline:D(6,30),desc:'Base conceptual de IA para comunicar con el equipo técnico.'},
+  {id:'cq3-1',type:'cap',q:'Q3',title:'Figma',hrs:4,done:false,diff:'MEDIO',deadline:D(9,30),desc:'Diseño de interfaces y prototipos para proyectos de innovación.'},
+  {id:'cq3-2',type:'cap',q:'Q3',title:'Storytelling para Negocios',hrs:4,done:false,diff:'MEDIO',deadline:D(9,30),desc:'Comunicar impacto y resultados con narrativas efectivas.'},
+  {id:'cq3-3',type:'cap',q:'Q3',title:'Visualización de Datos y Storytelling',hrs:3,done:false,diff:'MEDIO',deadline:D(9,30),desc:'Presentar datos del dashboard de KPIs de forma visual y clara.'},
+  {id:'cq3-4',type:'cap',q:'Q3',title:'CX Research y UX Testing',hrs:3,done:false,diff:'MEDIO',deadline:D(9,30),desc:'Investigación de experiencia de usuario en proyectos de innovación.'},
+  {id:'cq3-5',type:'cap',q:'Q3',title:'Live Classes Design Thinking',hrs:3,done:false,diff:'MEDIO',deadline:D(9,30),desc:'Aplicación práctica de Design Thinking con casos reales.'},
+  {id:'cq3-6',type:'cap',q:'Q3',title:'Práctico de Project Management',hrs:3,done:false,diff:'MEDIO',deadline:D(9,30),desc:'Aplicación práctica de gestión de proyectos en contextos reales.'},
+  {id:'cq3-7',type:'cap',q:'Q3',title:'Gestión de Equipos con Notion',hrs:3,done:false,diff:'FÁCIL',deadline:D(9,30),desc:'Organizar el trabajo y la documentación del equipo en Notion.'},
+  {id:'cq3-8',type:'cap',q:'Q3',title:'RPA e Hiperautomatización con IA',hrs:3,done:false,diff:'DIFÍCIL',deadline:D(9,30),desc:'Automatización de procesos con IA — directamente relevante para O6.'},
+  {id:'cq3-9',type:'cap',q:'Q3',title:'Inteligencia Emocional',hrs:2,done:false,diff:'FÁCIL',deadline:D(9,30),desc:'Habilidad clave para liderazgo y manejo de equipos de innovación.'},
+  {id:'cq3-10',type:'cap',q:'Q3',title:'Growth Mindset para Equipos',hrs:2,done:false,diff:'FÁCIL',deadline:D(9,30),desc:'Cultura de aprendizaje continuo y mejora constante.'},
+  {id:'cq4-1',type:'cap',q:'Q4',title:'Agile Delivery Management',hrs:3,done:false,diff:'MEDIO',deadline:D(12,31),desc:'Gestión ágil para entrega de valor continuo al negocio.'},
+  {id:'cq4-2',type:'cap',q:'Q4',title:'Thick Data en Negocios',hrs:2,done:false,diff:'MEDIO',deadline:D(12,31),desc:'Combinar datos cuantitativos y cualitativos para mejores decisiones.'},
+  {id:'cq4-3',type:'cap',q:'Q4',title:'Ética y Manejo de Datos para IA',hrs:2,done:false,diff:'FÁCIL',deadline:D(12,31),desc:'Responsabilidad en el uso de IA en proyectos de innovación.'},
+  {id:'cq4-4',type:'cap',q:'Q4',title:'Herramientas de IA para Equipos de Datos',hrs:2,done:false,diff:'MEDIO',deadline:D(12,31),desc:'Aplicar IA en análisis de datos del departamento.'},
+  {id:'cq4-5',type:'cap',q:'Q4',title:'Liderazgo Creativo',hrs:2,done:false,diff:'FÁCIL',deadline:D(12,31),desc:'Liderazgo orientado a la innovación y creatividad organizacional.'},
+  {id:'cq4-6',type:'cap',q:'Q4',title:'Investigación de Mercados y Tendencias',hrs:3,done:false,diff:'MEDIO',deadline:D(12,31),desc:'Explorar oportunidades de nuevos negocios (O6).'},
+  {id:'cq4-7',type:'cap',q:'Q4',title:'Gestión de Procesos UX',hrs:2,done:false,diff:'FÁCIL',deadline:D(12,31),desc:'Gestión de la experiencia de usuario en herramientas internas.'}
+  ]};
+}
+
+function doLogin(){
+  const e=document.getElementById('le').value.trim().toLowerCase(),p=document.getElementById('lp').value,er=document.getElementById('lerr');
+  if(!e||!p){er.textContent='Completa todos los campos.';return;}
+  const u=GU();
+  if(e===LUCAS&&!u[e]){u[e]={name:'Lucas Pereyra',role:'Analista de Innovación',pass:p};SU(u);localStorage.setItem('okr_d_'+e,JSON.stringify(LD()));}
+  if(!u[e]){er.textContent='Usuario no encontrado.';return;}
+  if(u[e].pass!==p){er.textContent='Contraseña incorrecta.';return;}
+  CU=e;er.textContent='';startApp();
+}
+function doReg(){
+  const n=document.getElementById('rn').value.trim(),e=document.getElementById('re').value.trim().toLowerCase(),p=document.getElementById('rp').value,r=document.getElementById('rr').value.trim(),er=document.getElementById('rerr');
+  if(!n||!e||!p||!r){er.textContent='Completa todos los campos.';return;}
+  if(p.length<6){er.textContent='Contraseña mínimo 6 caracteres.';return;}
+  const u=GU();if(u[e]){er.textContent='Correo ya registrado.';return;}
+  u[e]={name:n,role:r,pass:p};SU(u);localStorage.setItem('okr_d_'+e,JSON.stringify({name:n,role:r,okrs:[],caps:[]}));
+  showLogin();SN('success','¡Cuenta creada!','Inicia sesión con tus credenciales.');
+}
+function doLogout(){CU=null;document.getElementById('app').classList.remove('visible');showLogin();}
+function showLogin(){document.getElementById('register-screen').classList.add('hidden');document.getElementById('login-screen').classList.remove('hidden');}
+function showReg(){document.getElementById('login-screen').classList.add('hidden');document.getElementById('register-screen').classList.remove('hidden');}
+function startApp(){
+  document.getElementById('login-screen').classList.add('hidden');document.getElementById('app').classList.add('visible');
+  const u=GU()[CU];document.getElementById('sbn').textContent=u.name;document.getElementById('sbr').textContent=u.role;document.getElementById('sba').textContent=u.name.charAt(0).toUpperCase();
+  chkOv();gp('dashboard');schedN();
+}
+document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+const QDL=q=>({Q1:new Date(2026,2,31),Q2:new Date(2026,5,30),Q3:new Date(2026,8,30),Q4:new Date(2026,11,31)}[q]||new Date(2026,11,31));
+function CP(i){if(i.type==='cap')return i.done?100:0;if(i.measure==='counter')return i.target>0?Math.min(100,Math.round(i.current/i.target*100)):0;if(i.checklist?.length)return Math.round(i.checklist.filter(c=>c.done).length/i.checklist.length*100);if(i.measure==='single')return i.current?100:0;return 0;}
+function PRI(i){if(i.overdue)return'alta';const now=new Date(),dl=i.deadline?new Date(i.deadline):QDL(i.q),days=Math.ceil((dl-now)/86400000),ds=i.diff==='DIFÍCIL'?3:i.diff==='MEDIO'?2:1;if(days<0||(days<30&&ds>=2)||days<14)return'alta';if(days<90||ds===3)return'media';return'baja';}
+function SORT(arr){const po={alta:0,media:1,baja:2};return[...arr].sort((a,b)=>{const pa=po[PRI(a)],pb=po[PRI(b)];if(pa!==pb)return pa-pb;const da=a.deadline?new Date(a.deadline):QDL(a.q),db=b.deadline?new Date(b.deadline):QDL(b.q);return da-db;});}
+function chkOv(){const d=GD(),now=new Date();let ch=false;[...d.okrs,...d.caps].forEach(i=>{if(!i.deadline)return;const w=i.overdue;i.overdue=new Date(i.deadline)<now&&CP(i)<100;if(i.overdue!==w)ch=true;});if(ch)SD(d);}
+
+function SN(type,title,msg,dur=4500){
+  const ics={success:'✓',error:'✕',warning:'!',info:'i'};
+  const el=document.createElement('div');el.className='notif '+type;
+  el.innerHTML=`<span style="font-size:14px;flex-shrink:0;margin-top:1px">${ics[type]}</span><div><div class="nt">${title}</div><div class="nm">${msg}</div></div><button class="nc" onclick="this.parentElement.remove()">✕</button>`;
+  document.getElementById('nc').appendChild(el);
+  setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300);},dur);
+}
+function reqNotif(){if(!('Notification'in window)){SN('info','Notificaciones','Tu navegador no lo soporta.');return;}Notification.requestPermission().then(p=>p==='granted'?SN('success','Activadas','Recibirás alertas de OKRs próximos a vencer.'):SN('warning','Sin permiso','Actívalas manualmente en el navegador.'));}
+function schedN(){const d=GD(),now=new Date();let ov=0,urg=0;[...d.okrs,...d.caps].forEach(i=>{if(i.overdue)ov++;else{const dl=i.deadline?new Date(i.deadline):QDL(i.q);if((dl-now)/86400000<14)urg++;}});setTimeout(()=>{if(ov>0)SN('error',`${ov} elemento${ov>1?'s':''} vencido${ov>1?'s':''}`, 'Revisa y actualiza su progreso.',7000);else if(urg>0)SN('warning',`${urg} urgente${urg>1?'s':''}`, 'Tienen menos de 14 días para su fecha límite.',5500);else SN('success','¡Todo al día!','No tienes elementos vencidos.',4000);},900);}
+
+let PG='dashboard',SQ='',AF={q:[],diff:[],priority:[],from:'',to:''};
+function gp(p){
+  PG=p;document.querySelectorAll('.nav-item').forEach((n,i)=>n.classList.toggle('active',['dashboard','okrs','caps'][i]===p));
+  document.getElementById('ttl').textContent={dashboard:'Dashboard',okrs:'Mis OKRs',caps:'Capacitaciones'}[p];
+  const ab=document.getElementById('addb');if(p==='dashboard'){ab.style.display='none';}else{ab.style.display='';ab.textContent=p==='okrs'?'+ OKR':'+ Capacitación';}
+  if(p==='dashboard')rDB();else if(p==='okrs')rOKRs();else rCaps();
+}
+
+function rDB(){
+  const d=GD(),all=[...d.okrs,...d.caps];
+  const tot=all.length,dn=all.filter(i=>CP(i)>=100).length,ip=all.filter(i=>CP(i)>0&&CP(i)<100).length,ov=all.filter(i=>i.overdue).length;
+  const qc=['Q1','Q2','Q3','Q4'].map(q=>{
+    const items=SORT([...d.okrs,...d.caps].filter(i=>i.q===q)),pct=items.length?Math.round(items.reduce((s,i)=>s+CP(i),0)/items.length):0;
+    const per={Q1:'Ene – Mar',Q2:'Abr – Jun',Q3:'Jul – Sep',Q4:'Oct – Dic'}[q];
+    const rows=items.slice(0,4).map(i=>{const p=CP(i),st=p>=100?'done':i.overdue?'overdue':p>0?'progress':'pending';return`<div class="qr"><span class="qrn" title="${i.title}">${i.title}</span><span class="sp s${st.charAt(0)}">${{done:'Listo',overdue:'Vencido',progress:'En curso',pending:'Pendiente'}[st]}</span></div>`;}).join('');
+    return`<div class="qc"><div class="qct"><div><div class="qcl">${q}</div><div class="qcp">${per}</div></div><div class="qpct">${pct}<span style="font-size:14px;color:var(--g300)">%</span></div></div><div class="qt"><div class="qf" style="width:${pct}%"></div></div><div class="qrs">${rows||'<div style="font-size:12px;color:var(--g300);padding:3px 0">Sin elementos este trimestre</div>'}</div></div>`;
+  }).join('');
+  document.getElementById('ca').innerHTML=`<div class="sg"><div class="sc"><div class="sa bk"></div><div class="sl">Total OKRs</div><div class="sv">${d.okrs.length}</div><div class="ss">${d.okrs.filter(o=>CP(o)>=100).length} completados</div></div><div class="sc"><div class="sa rd"></div><div class="sl">Completados</div><div class="sv">${dn}</div><div class="ss">de ${tot} elementos</div></div><div class="sc"><div class="sa gn"></div><div class="sl">En Progreso</div><div class="sv">${ip}</div><div class="ss">elementos activos</div></div><div class="sc"><div class="sa bl"></div><div class="sl">Vencidos</div><div class="sv" style="${ov>0?'color:var(--red)':''}">${ov}</div><div class="ss">${ov>0?'Acción requerida':'Al día ✓'}</div></div></div><div class="qg">${qc}</div>`;
+}
+
+function AFilt(items){
+  if(SQ){const s=SQ.toLowerCase();items=items.filter(i=>i.title.toLowerCase().includes(s)||(i.parent||'').toLowerCase().includes(s)||(i.desc||'').toLowerCase().includes(s));}
+  if(AF.q.length)items=items.filter(i=>AF.q.includes(i.q));
+  if(AF.diff.length)items=items.filter(i=>AF.diff.includes(i.diff));
+  if(AF.priority.length)items=items.filter(i=>AF.priority.includes(PRI(i)));
+  if(AF.from)items=items.filter(i=>(i.deadline||QDL(i.q).toISOString().split('T')[0])>=AF.from);
+  if(AF.to)items=items.filter(i=>(i.deadline||QDL(i.q).toISOString().split('T')[0])<=AF.to);
+  return items;
+}
+function FH(){
+  const act=AF.q.length||AF.diff.length||AF.priority.length||AF.from||AF.to;
+  return`<div class="fw"><button class="fb${act?' act':''}" onclick="tFDD(event)">⊟ Filtrar${act?' ●':''}</button><div class="fd" id="fdd">${[['Q',['Q1','Q2','Q3','Q4','Anual'],'q'],['Dificultad',['FÁCIL','MEDIO','DIFÍCIL'],'diff'],['Prioridad',['alta','media','baja'],'priority']].map(([col,opts,k])=>`<div class="fci" onclick="tFS('${col}',event)">${col} <span>›</span></div><div class="fsub" id="fs-${col}">${opts.map(v=>`<label class="fchk"><input type="checkbox" ${AF[k].includes(v)?'checked':''} onchange="tFV('${k}','${v}',this.checked)"> ${v.charAt(0).toUpperCase()+v.slice(1)}</label>`).join('')}<div style="text-align:right;padding:1px 5px"><button onclick="clF('${k}')" style="font-size:10px;color:var(--g400);background:none;border:none;cursor:pointer">Limpiar</button></div></div>`).join('')}<div class="fci" onclick="tFS('Fecha',event)">Fecha <span>›</span></div><div class="fsub" id="fs-Fecha"><div class="drange"><label>Desde</label><input type="date" value="${AF.from}" onchange="AF.from=this.value;rf()"><label>Hasta</label><input type="date" value="${AF.to}" onchange="AF.to=this.value;rf()"></div></div><button class="fca" onclick="clAF()">Limpiar todos los filtros</button></div></div>`;
+}
+function tFDD(e){e.stopPropagation();document.getElementById('fdd')?.classList.toggle('open');}
+function tFS(c,e){e.stopPropagation();document.getElementById('fs-'+c)?.classList.toggle('open');}
+function tFV(k,v,c){if(c&&!AF[k].includes(v))AF[k].push(v);else AF[k]=AF[k].filter(x=>x!==v);rf();}
+function clF(k){AF[k]=[];rf();}
+function clAF(){AF={q:[],diff:[],priority:[],from:'',to:''};rf();}
+function rf(){if(PG==='okrs')rOKRs();else if(PG==='caps')rCaps();}
+document.addEventListener('click',()=>document.getElementById('fdd')?.classList.remove('open'));
+
+function rOKRs(){
+  const d=GD();let items=AFilt(SORT([...d.okrs]));
+  const gs=['Q1','Q2','Q3','Q4','Anual'].map(q=>{
+    const qi=items.filter(i=>i.q===q);if(!qi.length)return'';
+    const gp=Math.round(qi.reduce((s,i)=>s+CP(i),0)/qi.length);
+    return`<div class="qgrp"><div class="qgh"><span class="qgl">${q}</span><span class="qgc">${qi.length} OKRs · ${gp}%</span><div class="qgbar"><div class="qgfill" style="width:${gp}%"></div></div></div>${qi.map(i=>OC(i)).join('')}</div>`;
+  }).join('');
+  document.getElementById('ca').innerHTML=`<div class="tb"><input class="sb" placeholder="Buscar OKR..." value="${SQ}" oninput="SQ=this.value;rOKRs()">${FH()}</div>${gs||'<div style="padding:44px;text-align:center;color:var(--g300);font-size:13px">Sin resultados.</div>'}`;
+}
+function rCaps(){
+  const d=GD();let items=AFilt(SORT([...d.caps]));
+  const gs=['Q1','Q2','Q3','Q4'].map(q=>{
+    const qi=items.filter(i=>i.q===q);if(!qi.length)return'';
+    const dh=qi.filter(i=>i.done).reduce((s,i)=>s+(i.hrs||0),0),th=qi.reduce((s,i)=>s+(i.hrs||0),0),gp=Math.round(qi.filter(i=>i.done).length/qi.length*100);
+    return`<div class="qgrp"><div class="qgh"><span class="qgl">${q}</span><span class="qgc">${qi.filter(i=>i.done).length}/${qi.length} cursos · ${dh}/${th}h</span><div class="qgbar"><div class="qgfill" style="width:${gp}%"></div></div></div>${qi.map(i=>CC(i)).join('')}</div>`;
+  }).join('');
+  document.getElementById('ca').innerHTML=`<div class="tb"><input class="sb" placeholder="Buscar capacitación..." value="${SQ}" oninput="SQ=this.value;rCaps()">${FH()}</div>${gs||'<div style="padding:44px;text-align:center;color:var(--g300)">Sin capacitaciones.</div>'}`;
+}
+
+function OC(item){
+  const prog=CP(item),pri=PRI(item);
+  const dm={FÁCIL:'ez',MEDIO:'mz',DIFÍCIL:'dz'},pm={alta:'phi',media:'pmd',baja:'plo'},pl={alta:'Alta',media:'Media',baja:'Baja'};
+  const fc=prog>=100?'dn':item.overdue?'ov2':'';
+  return`<div class="ic ${item.overdue?'ov':pri==='alta'?'hi':''}" id="card-${item.id}"><div class="ch" onclick="txp('${item.id}')"><button class="xb" id="xb-${item.id}">▶</button><div class="chips"><span class="chip ckr">OKR</span><span class="chip c${dm[item.diff]||'mz'}">${item.diff||'MEDIO'}</span><span class="chip ${pm[pri]}">${pl[pri]}</span>${item.overdue?'<span class="chip pov">VENCIDO</span>':''}</div><span class="ct">${item.parent?`<span class="cpar">${item.parent} ·</span>`:''} ${item.title}</span><div class="cr"><span class="cper">${item.period||item.q}</span><div class="mpw"><div class="mtr"><div class="mf ${fc}" style="width:${prog}%"></div></div><span class="cpct">${prog}%</span></div></div><div class="ca" onclick="event.stopPropagation()"><button class="ib" onclick="txp('${item.id}')">✎</button><button class="ib dl" onclick="dI('${item.id}')">✕</button></div></div><div class="ip" id="panel-${item.id}">${OP(item)}</div></div>`;
+}
+function CC(item){
+  const prog=item.done?100:0,pri=PRI(item);
+  const dm={FÁCIL:'ez',MEDIO:'mz',DIFÍCIL:'dz'},pm={alta:'phi',media:'pmd',baja:'plo'},pl={alta:'Alta',media:'Media',baja:'Baja'};
+  const fc=prog>=100?'dn':item.overdue?'ov2':'';
+  return`<div class="ic ${item.overdue?'ov':''}" id="card-${item.id}"><div class="ch" onclick="txp('${item.id}')"><button class="xb" id="xb-${item.id}">▶</button><div class="chips"><span class="chip ccp">Capacitación</span><span class="chip c${dm[item.diff]||'mz'}">${item.diff||'MEDIO'}</span><span class="chip ${pm[pri]}">${pl[pri]}</span>${item.overdue?'<span class="chip pov">VENCIDO</span>':''}</div><span class="ct">${item.title}</span><div class="cr"><span class="cper">${item.hrs||0}h</span><div class="mpw"><div class="mtr"><div class="mf ${fc}" style="width:${prog}%"></div></div><span class="cpct">${prog}%</span></div></div><div class="ca" onclick="event.stopPropagation()"><button class="ib dl" onclick="dI('${item.id}')">✕</button></div></div><div class="ip" id="panel-${item.id}">${CP2(item)}</div></div>`;
+}
+
+function OP(item){
+  const prog=CP(item),fc=prog>=100?'dn':item.overdue?'ov2':'';
+  let mw='';
+  if(item.measure==='counter')mw=`<div class="crow"><span class="clbl">Progreso actual</span><div class="cctrl"><button class="cbb" onclick="adjC('${item.id}',-1)">−</button><span class="cval">${item.current||0} / ${item.target}</span><button class="cbb" onclick="adjC('${item.id}',1)">+</button></div></div>`;
+  else if(item.measure==='single'&&!item.checklist?.length)mw=`<div class="sgtog"><input type="checkbox" id="sg-${item.id}" ${item.current?'checked':''} onchange="tgS('${item.id}',this.checked)"><label for="sg-${item.id}">${item.current?'Completado ✓':'Marcar como completado'}</label></div>`;
+  const ckh=(item.checklist||[]).length?`<div class="cklist" id="cl-${item.id}">${(item.checklist||[]).map((c,i)=>`<div class="cki ${c.done?'ckd':''}" id="ci-${item.id}-${i}"><input type="checkbox" ${c.done?'checked':''} onchange="tgC('${item.id}',${i},this.checked)"><label>${c.text}</label><button class="rb" onclick="rmC('${item.id}',${i})">✕</button></div>`).join('')}</div>`:'';
+  return`<div class="pcols"><div class="panel-col"><span class="slbl">¿Qué necesitas hacer?</span><div class="pdesc">${item.desc||'Sin descripción. Edítalo abajo.'}</div></div><div class="panel-col"><span class="slbl">Progreso</span><div class="ph"><span style="font-size:11px;color:var(--g400)">Avance</span><span class="pnum">${prog}<span style="font-size:14px;color:var(--g300);font-weight:400">%</span></span></div><div class="ptrack"><div class="pfill ${fc}" id="pb-${item.id}" style="width:${prog}%"></div></div>${mw}<span class="slbl" style="margin-top:12px">Checklist de pasos</span>${ckh}<div class="ack"><input id="aci-${item.id}" placeholder="Agregar paso..." onkeydown="if(event.key==='Enter')addCk('${item.id}')"><button onclick="addCk('${item.id}')">+</button></div></div></div><div class="esec"><span class="slbl">Editar OKR</span><div class="egrid"><input class="ei" id="et-${item.id}" value="${item.title.replace(/"/g,'&quot;')}" placeholder="Título" style="grid-column:1/-1"><textarea class="ei eta" id="ed-${item.id}" placeholder="Notas / acciones necesarias">${item.desc||''}</textarea><select class="esel" id="edf-${item.id}"><option ${item.diff==='FÁCIL'?'selected':''}>FÁCIL</option><option ${item.diff==='MEDIO'?'selected':''}>MEDIO</option><option ${item.diff==='DIFÍCIL'?'selected':''}>DIFÍCIL</option></select><input class="ei" id="edl-${item.id}" type="date" value="${item.deadline||''}"><button class="sbt" onclick="svOKR('${item.id}')">Guardar cambios</button></div></div>`;
+}
+function CP2(item){
+  return`<div class="pcols"><div class="panel-col"><span class="slbl">Descripción</span><div class="pdesc">${item.desc||'—'}</div></div><div class="panel-col"><span class="slbl">Estado del curso</span><div class="cptog"><input type="checkbox" id="cap-${item.id}" ${item.done?'checked':''} onchange="tgCap('${item.id}',this.checked)"><label for="cap-${item.id}" class="${item.done?'dn':''}">${item.title}</label><span class="hbdg">${item.hrs||0}h</span></div></div></div><div class="esec"><span class="slbl">Editar capacitación</span><div class="egrid"><input class="ei" id="cet-${item.id}" value="${item.title.replace(/"/g,'&quot;')}" placeholder="Título"><input class="ei" id="ceh-${item.id}" type="number" value="${item.hrs||0}" placeholder="Horas"><textarea class="ei eta" id="ced-${item.id}" placeholder="Descripción">${item.desc||''}</textarea><select class="esel" id="cedf-${item.id}"><option ${item.diff==='FÁCIL'?'selected':''}>FÁCIL</option><option ${item.diff==='MEDIO'?'selected':''}>MEDIO</option><option ${item.diff==='DIFÍCIL'?'selected':''}>DIFÍCIL</option></select><button class="sbt" onclick="svCap('${item.id}')">Guardar cambios</button></div></div>`;
+}
+
+function txp(id){const p=document.getElementById('panel-'+id),b=document.getElementById('xb-'+id);p.classList.toggle('open');b.classList.toggle('o');b.textContent=b.classList.contains('o')?'▼':'▶';}
+function adjC(id,d){const data=GD(),item=data.okrs.find(i=>i.id===id);if(!item)return;item.current=Math.max(0,Math.min(item.target,(item.current||0)+d));const p=CP(item);if(p>=100){item.overdue=false;SN('success','¡OKR completado!',`"${item.title.substring(0,40)}…" al 100%.`);}SD(data);const cv=document.querySelector(`#card-${id} .cval`);if(cv)cv.textContent=`${item.current} / ${item.target}`;uPB(id,p,item.overdue);}
+function tgS(id,c){const data=GD(),item=data.okrs.find(i=>i.id===id);if(!item)return;item.current=c?1:0;if(c){item.overdue=false;SN('success','¡OKR completado!',`"${item.title.substring(0,40)}…" marcado listo.`);}const p=CP(item);SD(data);uPB(id,p,item.overdue);}
+function tgC(id,idx,c){const data=GD(),item=data.okrs.find(i=>i.id===id);if(!item||!item.checklist)return;item.checklist[idx].done=c;const p=CP(item);if(p>=100){item.overdue=false;SN('success','¡OKR completado!',`"${item.title.substring(0,40)}…" al 100%.`);}SD(data);const ci=document.getElementById(`ci-${id}-${idx}`);if(ci){ci.classList.toggle('ckd',c);const cb=ci.querySelector('input');if(cb)cb.checked=c;}uPB(id,p,item.overdue);}
+function addCk(id){const inp=document.getElementById('aci-'+id);if(!inp||!inp.value.trim())return;const data=GD(),item=data.okrs.find(i=>i.id===id);if(!item)return;if(!item.checklist)item.checklist=[];item.checklist.push({id:'c'+Date.now(),text:inp.value.trim(),done:false});if(item.measure==='checklist')item.target=item.checklist.length;SD(data);inp.value='';const panel=document.getElementById('panel-'+id);if(panel)panel.innerHTML=OP(item);SN('info','Paso agregado','');}
+function rmC(id,idx){const data=GD(),item=data.okrs.find(i=>i.id===id);if(!item||!item.checklist)return;item.checklist.splice(idx,1);if(item.measure==='checklist')item.target=Math.max(1,item.checklist.length);SD(data);const panel=document.getElementById('panel-'+id);if(panel)panel.innerHTML=OP(item);}
+function tgCap(id,c){const data=GD(),item=data.caps.find(i=>i.id===id);if(!item)return;item.done=c;if(c)SN('success','¡Capacitación completada!',`"${item.title}" — ${item.hrs}h registradas.`);SD(data);const lb=document.querySelector(`#cap-${id}+label`);if(lb)lb.classList.toggle('dn',c);uPB(id,c?100:0,false);}
+function uPB(id,prog,ov){const pb=document.getElementById('pb-'+id);if(pb){pb.style.width=prog+'%';pb.className='pfill'+(prog>=100?' dn':ov?' ov2':'');}const mn=document.querySelector(`#card-${id} .mf`);if(mn){mn.style.width=prog+'%';mn.className='mf'+(prog>=100?' dn':ov?' ov2':'');}const cp=document.querySelector(`#card-${id} .cpct`);if(cp)cp.textContent=prog+'%';}
+function svOKR(id){const data=GD(),item=data.okrs.find(i=>i.id===id);if(!item)return;const t=document.getElementById('et-'+id),dsc=document.getElementById('ed-'+id),df=document.getElementById('edf-'+id),dl=document.getElementById('edl-'+id);if(t)item.title=t.value;if(dsc)item.desc=dsc.value;if(df)item.diff=df.value;if(dl)item.deadline=dl.value;SD(data);SN('success','OKR actualizado','Cambios guardados.');rOKRs();}
+function svCap(id){const data=GD(),item=data.caps.find(i=>i.id===id);if(!item)return;const t=document.getElementById('cet-'+id),h=document.getElementById('ceh-'+id),dsc=document.getElementById('ced-'+id),df=document.getElementById('cedf-'+id);if(t)item.title=t.value;if(h)item.hrs=parseInt(h.value)||0;if(dsc)item.desc=dsc.value;if(df)item.diff=df.value;SD(data);SN('success','Capacitación actualizada','');rCaps();}
+function dI(id){if(!confirm('¿Eliminar este elemento? No se puede deshacer.'))return;const data=GD();data.okrs=data.okrs.filter(i=>i.id!==id);data.caps=data.caps.filter(i=>i.id!==id);SD(data);SN('info','Eliminado','Elemento removido.');if(PG==='okrs')rOKRs();else rCaps();}
+
+function openModal(){document.getElementById('mo').classList.add('open');atc();amc();}
+function closeModal(){document.getElementById('mo').classList.remove('open');}
+function atc(){const t=document.getElementById('at').value;document.getElementById('okrf').style.display=t==='cap'?'none':'';document.getElementById('ahf').style.display=t==='cap'?'':'none';}
+function amc(){const m=document.getElementById('am').value;document.getElementById('atf').style.display=m==='counter'?'':'none';}
+function confAdd(){
+  const type=document.getElementById('at').value,q=document.getElementById('aq').value,title=document.getElementById('atl').value.trim(),par=document.getElementById('apar').value.trim(),diff=document.getElementById('adf').value,desc=document.getElementById('adesc').value.trim(),dl=document.getElementById('adl').value;
+  if(!title){SN('error','Campo requerido','El título no puede estar vacío.');return;}
+  const data=GD(),id=type+'-'+Date.now();
+  if(type==='cap'){const hrs=parseInt(document.getElementById('ahs').value)||2;data.caps.push({id,type:'cap',q,title,hrs,done:false,diff,deadline:dl,desc,overdue:false});}
+  else{const measure=document.getElementById('am').value,target=parseInt(document.getElementById('atgt').value)||1;data.okrs.push({id,type:'okr',parent:par,q,title,period:q,diff,deadline:dl,measure,target,current:0,desc,checklist:[],overdue:false});}
+  SD(data);closeModal();SN('success','Elemento creado',`"${title}" agregado a ${q}.`);
+  ['atl','apar','adesc','adl'].forEach(x=>{const el=document.getElementById(x);if(el)el.value='';});
+  if(PG==='okrs'||type!=='cap')rOKRs();else rCaps();
+}
+</script>
+</body>
+</html>
